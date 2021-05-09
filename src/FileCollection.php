@@ -33,11 +33,12 @@ class FileCollection implements CollectionInterface
      */
     public function get(string $index, $defaultValue = null)
     {
-        if (!$value = $this->has($index)) {
+        if (!$this->has($index)) {
             return $defaultValue;
         }
+        $value = $this->explodeAndFindStringByIndex($index);
 
-        return $value;
+        return $value[1];
     }
 
     /**
@@ -45,6 +46,10 @@ class FileCollection implements CollectionInterface
      */
     public function set(string $index, $value, int $time = 60)
     {
+        if (is_array($value)){
+           $value = implode($value);
+        }
+
         $registerTime = time() + $time;
 
         $register = $index.'&'.$value.'&'.$registerTime.'/';
@@ -57,17 +62,15 @@ class FileCollection implements CollectionInterface
      */
     public function has(string $index)
     {
-        $archive = explode('/', file_get_contents($this->filePath), -1);
-        foreach ($archive as $data){
-            $dataExploded = explode('&', $data);
-            if ($dataExploded[0] == $index){
-                if ($dataExploded[2] > time()){
-                    return $dataExploded[1];
-                } else {
-                    return null;
-                }
+        if ($dataExploded = $this->explodeAndFindStringByIndex($index)){
+            if ($dataExploded[2] > time()){
+                return true;
+            } else {
+                return false;
             }
         }
+        
+        return false;
     }
 
     /**
@@ -86,6 +89,23 @@ class FileCollection implements CollectionInterface
     public function clean()
     {
         fopen($this->filePath, 'w+');
+    }
+
+    /**
+     * method explode the content from archive and return data by index
+     * @return string|false
+     */
+    protected function explodeAndFindStringByIndex(string $index)
+    {
+        $archive = explode('/', file_get_contents($this->filePath), -1);
+        foreach ($archive as $data){
+            $dataExploded = explode('&', $data);
+            if ($dataExploded[0] == $index){
+                return $dataExploded;
+            }
+        }
+
+        return false;
     }
 
 }

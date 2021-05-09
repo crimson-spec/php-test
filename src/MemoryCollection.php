@@ -17,6 +17,13 @@ class MemoryCollection implements CollectionInterface
     protected $data;
 
     /**
+     * Collection table
+     *
+     * @var array
+     */
+    protected $table;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -39,8 +46,10 @@ class MemoryCollection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function set(string $index, $value)
+    public function set(string $index, $value, int $time = 60)
     {
+        $registerTime = time() + $time;
+        $this->table[$index] = $registerTime;
         $this->data[$index] = $value;
     }
 
@@ -49,7 +58,14 @@ class MemoryCollection implements CollectionInterface
      */
     public function has(string $index)
     {
-        return array_key_exists($index, $this->data);
+        if (array_key_exists($index, $this->data)){
+            if ($this->table[$index] > time()){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
