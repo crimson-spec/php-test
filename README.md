@@ -78,7 +78,7 @@ Para executar os testes, utilize o comando, na raiz do projeto:
 $ composer test
 ```
 
-[icon-travisci]: https://img.shields.io/travis/liveecommerce/php-test.svg?style=flat-square
+[icon-travisci]: https://www.travis-ci.com/crimson-spec/php-test.svg?branch=master
 [icon-codecov]: https://img.shields.io/codecov/c/github/liveecommerce/php-test.svg?style=flat-square
 
 [link-travisci]: https://www.travis-ci.com/github/crimson-spec/php-test
