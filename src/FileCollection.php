@@ -12,24 +12,19 @@ class FileCollection implements CollectionInterface
      * @var string
      */
     protected $archive;
-
+    
     /**
-     * collection registerTime
-     * @var int
+     * collection filePath
+     * @var string
      */
-    protected $registerTime;
+    protected $filePath = 'archive.txt';
 
      /**
      * Constructor
      */
     public function __construct()
     {
-        if (!file_exists('archive.txt')){
-            $this->archive = fopen('archive.txt','w+');
-            $this->archive = file_get_contents('archive.txt');
-        }else{
-            $this->archive = file_get_contents('archive.txt');
-        }
+        $this->archive = fopen($this->filePath,'w+');
         
     }
     
@@ -38,19 +33,23 @@ class FileCollection implements CollectionInterface
      */
     public function get(string $index, $defaultValue = null)
     {
-        if (!$this->has($index)) {
+        if (!$value = $this->has($index)) {
             return $defaultValue;
         }
 
-        return $this->data[$index];
+        return $value;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function set(string $index, $value)
+    public function set(string $index, $value, int $time = 60)
     {
-        $this->data[$index] = $value;
+        $registerTime = time() + $time;
+
+        $register = $index.'&'.$value.'&'.$registerTime.'/';
+
+        fwrite($this->archive, $register);
     }
 
     /**
@@ -58,7 +57,17 @@ class FileCollection implements CollectionInterface
      */
     public function has(string $index)
     {
-        return array_key_exists($index, $this->data);
+        $archive = explode('/', file_get_contents($this->filePath), -1);
+        foreach ($archive as $data){
+            $dataExploded = explode('&', $data);
+            if ($dataExploded[0] == $index){
+                if ($dataExploded[2] > time()){
+                    return $dataExploded[1];
+                } else {
+                    return null;
+                }
+            }
+        }
     }
 
     /**
@@ -66,7 +75,9 @@ class FileCollection implements CollectionInterface
      */
     public function count(): int
     {
-        return count($this->data);
+        $archive = explode('/', file_get_contents($this->filePath), -1);
+
+        return count($archive);
     }
 
     /**
@@ -74,7 +85,7 @@ class FileCollection implements CollectionInterface
      */
     public function clean()
     {
-        $this->data = [];
+        fopen($this->filePath, 'w+');
     }
 
 }
