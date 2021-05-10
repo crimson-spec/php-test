@@ -79,7 +79,7 @@ $ composer test
 ```
 
 [icon-travisci]: https://www.travis-ci.com/crimson-spec/php-test.svg?branch=master
-[icon-codecov]: https://img.shields.io/codecov/c/github/liveecommerce/php-test.svg?style=flat-square
+[icon-codecov]: https://img.shields.io/codecov/c/github/crimson-spec/php-test.svg?style=flat-square
 
 [link-travisci]: https://www.travis-ci.com/github/crimson-spec/php-test
 [link-codecov]: https://app.codecov.io/gh/crimson-spec/php-test
