@@ -58,8 +58,8 @@ class MemoryCollection implements CollectionInterface
      */
     public function has(string $index)
     {
-        if (array_key_exists($index, $this->data)){
-            if ($this->table[$index] > time()){
+        if (array_key_exists($index, $this->data)) {
+            if ($this->table[$index] > time()) {
                 return true;
             } else {
                 return false;

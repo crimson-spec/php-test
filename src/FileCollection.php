@@ -24,8 +24,7 @@ class FileCollection implements CollectionInterface
      */
     public function __construct()
     {
-        $this->archive = fopen($this->filePath,'w+');
-        
+        $this->archive = fopen($this->filePath, 'w+');
     }
     
     /**
@@ -46,8 +45,8 @@ class FileCollection implements CollectionInterface
      */
     public function set(string $index, $value, int $time = 60)
     {
-        if (is_array($value)){
-           $value = implode($value);
+        if (is_array($value)) {
+            $value = implode($value) ;
         }
 
         $registerTime = time() + $time;
@@ -62,8 +61,8 @@ class FileCollection implements CollectionInterface
      */
     public function has(string $index)
     {
-        if ($dataExploded = $this->explodeAndFindStringByIndex($index)){
-            if ($dataExploded[2] > time()){
+        if ($dataExploded = $this->explodeAndFindStringByIndex($index)) {
+            if ($dataExploded[2] > time()) {
                 return true;
             } else {
                 return false;
@@ -98,14 +97,13 @@ class FileCollection implements CollectionInterface
     protected function explodeAndFindStringByIndex(string $index)
     {
         $archive = explode('/', file_get_contents($this->filePath), -1);
-        foreach ($archive as $data){
-            $dataExploded = explode('&', $data);
-            if ($dataExploded[0] == $index){
+        foreach ($archive as $data) {
+            $dataExploded = explode('&', $data) ;
+            if ($dataExploded[0] == $index) {
                 return $dataExploded;
             }
         }
 
         return false;
     }
-
 }
