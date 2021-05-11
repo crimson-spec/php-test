@@ -4,9 +4,8 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-env:
-  global:
-  - CODECOV_TOKEN="da25ddcc-410d-4067-bee9-76773796e8bf"
+codecov:
+  token: da25ddcc-410d-4067-bee9-76773796e8bf
 
 matrix:
   fast_finish: true
